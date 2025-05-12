@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Book API
+  version: 1.0.0
+  description: API for managing books
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+paths:
+  /book:
+    get:
+      summary: Get all books
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Add a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book added successfully
+  /book/{isbn}:
+    get:
+      summary: Get a book by ISBN
+      parameters:
+        - in: path
+          name: isbn
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+    delete:
+      summary: Delete a book by ISBN
+      parameters:
+        - in: path
+          name: isbn
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Book deleted successfully
+    post:
+      summary: Update a book by ISBN
+      parameters:
+        - in: path
+          name: isbn
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book updated successfully
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - isbn
+        - title
+        - author
+        - publish_date
+        - publisher
+        - numOfPages
+      properties:
+        isbn:
+          type: string
+          example: "9781593275846"
+        title:
+          type: string
+          example: "Eloquent JavaScript, Second Edition"
+        author:
+          type: string
+          example: "Marijn Haverbeke"
+        publish_date:
+          type: string
+          format: date
+          example: "2014-12-14"
+        publisher:
+          type: string
+          example: "No Starch Press"
+        numOfPages:
+          type: integer
+          example: 472
